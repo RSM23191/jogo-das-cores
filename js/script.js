@@ -38,7 +38,7 @@ function iniciarJogo() {
 
 function gerarGrade() {
   grade.innerHTML = "";
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 9; i++) {
     const cor = cores[Math.floor(Math.random() * cores.length)];
     const div = document.createElement("div");
     div.classList.add("quadrado");
