@@ -1,9 +1,9 @@
 #grade {
   display: grid;
-  grid-template-columns: repeat(3, 80px); 
-  grid-gap: 10px;
-  justify-content: center;
-  margin-top: 20px;
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 10px;
+  max-width: 270px; 
+  margin: 20px auto;
 }
 
 .quadrado {
