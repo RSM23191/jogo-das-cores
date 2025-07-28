@@ -4,7 +4,7 @@ let pontuacao = 0;
 let tempoRestante = 30;
 let nomeJogador = "";
 let intervaloTempo;
-let coresAtuais = []; 
+let coresAtuais = [];
 
 const botaoJogar = document.getElementById("botaoJogar");
 const grade = document.getElementById("grade");
@@ -41,11 +41,11 @@ function iniciarJogo() {
 
 function gerarGrade() {
   grade.innerHTML = "";
-  coresAtuais = []; // limpa as cores
+  coresAtuais = [];
 
   for (let i = 0; i < 9; i++) {
     const cor = cores[Math.floor(Math.random() * cores.length)];
-    coresAtuais.push(cor); 
+    coresAtuais.push(cor);
     const div = document.createElement("div");
     div.classList.add("quadrado");
     div.style.backgroundColor = cor;
@@ -56,7 +56,7 @@ function gerarGrade() {
 
 function escolherNovaCor() {
   const indice = Math.floor(Math.random() * coresAtuais.length);
-  corParaClicar = coresAtuais[indice]; 
+  corParaClicar = coresAtuais[indice];
   corAtual.textContent = corParaClicar;
   corAtual.style.color = corParaClicar;
 }
@@ -85,10 +85,23 @@ function finalizarJogo() {
 }
 
 function reiniciarJogo() {
-  document.getElementById("fim").classList.add("escondido");
-  document.getElementById("inicio").classList.remove("escondido");
+  clearInterval(intervaloTempo);
 
-  document.getElementById("nomeJogador").value = "";
-  document.getElementById("pontuacao").textContent = "0";
-  document.getElementById("tempo").textContent = "30";
+  pontuacao = 0;
+  tempoRestante = 30;
+  atualizarPontuacao();
+
+  document.getElementById("fim").classList.add("escondido");
+  document.getElementById("jogo").classList.remove("escondido");
+
+  gerarGrade();
+  escolherNovaCor();
+
+  tempo.textContent = tempoRestante;
+
+  intervaloTempo = setInterval(() => {
+    tempoRestante--;
+    tempo.textContent = tempoRestante;
+    if (tempoRestante === 0) finalizarJogo();
+  }, 1000);
 }
