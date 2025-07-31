@@ -58,11 +58,9 @@ function gerarGrade() {
 
 function escolherNovaCor() {
   const quadrados = document.querySelectorAll(".quadrado");
-  if (quadrados.length > 0) {
-    const indice = Math.floor(Math.random() * quadrados.length);
-    corAtual = quadrados[indice].getAttribute("data-cor");
-    corTexto.textContent = corAtual;
-  }
+  const indice = Math.floor(Math.random() * quadrados.length);
+  corAtual = quadrados[indice].getAttribute("data-cor");
+  corTexto.textContent = corAtual;
 }
 
 function verificarCor(event) {
@@ -82,6 +80,7 @@ function atualizarPontuacao() {
 }
 
 function finalizarJogo() {
+  clearInterval(intervaloTempo);
   document.getElementById("jogo").classList.add("escondido");
   document.getElementById("fim").classList.remove("escondido");
   nomeFinal.textContent = nomeJogador;
