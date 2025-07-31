@@ -1,30 +1,36 @@
-let cores = ["vermelho", "azul", "verde", "amarelo", "roxo", "laranja", "rosa", "marrom", "cinza"];
-let corAtual = "";
+const cores = ["red", "green", "blue", "yellow", "purple", "orange"];
+let corParaClicar = "";
 let pontuacao = 0;
 let tempoRestante = 30;
-let intervaloTempo;
 let nomeJogador = "";
+let intervaloTempo;
+let coresAtuais = [];
 
+const botaoJogar = document.getElementById("botaoJogar");
 const grade = document.getElementById("grade");
-const corTexto = document.getElementById("corAtual");
-const pontuacaoTexto = document.getElementById("pontuacao");
+const corAtual = document.getElementById("corAtual");
+const spanPontuacao = document.getElementById("pontuacao");
 const tempo = document.getElementById("tempo");
-const nomeExibido = document.getElementById("nomeExibido");
-const nomeFinal = document.getElementById("nomeFinal");
-const pontuacaoFinal = document.getElementById("pontuacaoFinal");
 
-document.getElementById("botaoJogar").addEventListener("click", () => {
-  const nomeInput = document.getElementById("nomeJogador").value.trim();
-  if (nomeInput !== "") {
-    nomeJogador = nomeInput;
-    document.getElementById("inicio").classList.add("escondido");
-    document.getElementById("jogo").classList.remove("escondido");
-    nomeExibido.textContent = nomeJogador;
-    iniciarJogo();
-  }
-});
+botaoJogar.onclick = () => {
+  iniciarJogo();
+};
 
 function iniciarJogo() {
+  clearInterval(intervaloTempo);
+
+  const nomeInput = document.getElementById("nomeJogador").value;
+  if (nomeInput === "") {
+    alert("Digite seu nome!");
+    return;
+  }
+
+  nomeJogador = nomeInput;
+
+  document.getElementById("inicio").classList.add("escondido");
+  document.getElementById("fim").classList.add("escondido");
+  document.getElementById("jogo").classList.remove("escondido");
+
   pontuacao = 0;
   tempoRestante = 30;
   atualizarPontuacao();
@@ -36,7 +42,6 @@ function iniciarJogo() {
     tempoRestante--;
     tempo.textContent = tempoRestante;
     if (tempoRestante <= 0) {
-      tempoRestante = 0;
       clearInterval(intervaloTempo);
       finalizarJogo();
     }
@@ -45,27 +50,28 @@ function iniciarJogo() {
 
 function gerarGrade() {
   grade.innerHTML = "";
+  coresAtuais = [];
+
   for (let i = 0; i < 9; i++) {
-    const corAleatoria = cores[Math.floor(Math.random() * cores.length)];
+    const cor = cores[Math.floor(Math.random() * cores.length)];
+    coresAtuais.push(cor);
     const div = document.createElement("div");
     div.classList.add("quadrado");
-    div.style.backgroundColor = corAleatoria;
-    div.setAttribute("data-cor", corAleatoria);
-    div.addEventListener("click", verificarCor);
+    div.style.backgroundColor = cor;
+    div.onclick = () => verificarCor(cor);
     grade.appendChild(div);
   }
 }
 
 function escolherNovaCor() {
-  const quadrados = document.querySelectorAll(".quadrado");
-  const indice = Math.floor(Math.random() * quadrados.length);
-  corAtual = quadrados[indice].getAttribute("data-cor");
-  corTexto.textContent = corAtual;
+  const indice = Math.floor(Math.random() * coresAtuais.length);
+  corParaClicar = coresAtuais[indice];
+  corAtual.textContent = corParaClicar;
+  corAtual.style.color = corParaClicar;
 }
 
-function verificarCor(event) {
-  const corClicada = event.target.getAttribute("data-cor");
-  if (corClicada === corAtual) {
+function verificarCor(clicada) {
+  if (clicada === corParaClicar) {
     pontuacao += 10;
   } else {
     pontuacao -= 5;
@@ -76,24 +82,25 @@ function verificarCor(event) {
 }
 
 function atualizarPontuacao() {
-  pontuacaoTexto.textContent = pontuacao;
+  spanPontuacao.textContent = pontuacao;
 }
 
 function finalizarJogo() {
   clearInterval(intervaloTempo);
   document.getElementById("jogo").classList.add("escondido");
   document.getElementById("fim").classList.remove("escondido");
-  nomeFinal.textContent = nomeJogador;
-  pontuacaoFinal.textContent = pontuacao;
+  document.getElementById("nomeFinal").textContent = nomeJogador;
+  document.getElementById("pontuacaoFinal").textContent = pontuacao;
 }
 
 function reiniciarJogo() {
   clearInterval(intervaloTempo);
+
   document.getElementById("fim").classList.add("escondido");
   document.getElementById("jogo").classList.remove("escondido");
+
   pontuacao = 0;
   tempoRestante = 30;
-  pontuacaoFinal.textContent = "0";
   atualizarPontuacao();
   gerarGrade();
   escolherNovaCor();
@@ -103,7 +110,6 @@ function reiniciarJogo() {
     tempoRestante--;
     tempo.textContent = tempoRestante;
     if (tempoRestante <= 0) {
-      tempoRestante = 0;
       clearInterval(intervaloTempo);
       finalizarJogo();
     }
